@@ -90,34 +90,32 @@ public class KedjaNy<E extends Comparable> implements Iterable<E> {
         }
     }
 
-    public void addInOrder(E data){
+    public void addInOrder(E data) {
+            Node<E> nyNod = new Node<>();
+            nyNod.data = data;
 
-        if (huvud == null) {
-            addFirst(data);
-        }
-
-        E b = getHuvud();
-        Node nuvarande = huvud;
-        //huvud = huvud.next;
-
-        if(data.compareTo(b) < 0){
-            addFirst(data);
-
-        }else{
-            while (nuvarande.next != null){
-
-                if(data.compareTo(b) > 0){
-                    nuvarande = nuvarande.next;
-                    addFirst(data);
-
-                }else if(data.compareTo(b) < 0){
-                    nuvarande = nuvarande.next;
-                    addInOrder(data);
+            if (huvud == null || nyNod.data.compareTo(huvud.data) <= 0) {
+                Node<E> temp = huvud;
+                huvud = nyNod;
+                nyNod.next = temp;
+            } else {
+                if (nyNod.data.compareTo(huvud.data) <= 0) {
+                    Node<E> temp = huvud;
+                    huvud = nyNod;
+                    nyNod.next = temp;
+                } else {
+                    Node<E> previous = huvud;
+                    Node<E> current = huvud.next;
+                    while (previous.next != null && nyNod.data.compareTo(previous.next.data) > 0) {
+                        previous = previous.next;
+                        current = current.next;
+                    }
+                    previous.next = nyNod;
+                    nyNod.next = current;
                 }
-
             }
+            size++;
         }
-    }
 
     public void addAt(int pos,E data){
         if(pos < 0 || pos > size){
